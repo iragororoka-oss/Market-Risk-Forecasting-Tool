@@ -73,7 +73,12 @@ loss_limit = st.sidebar.slider(
     max_value=50,
     value=10
 ) / 100
-
+initial_value = st.sidebar.number_input(
+    "Portfolio starting value",
+    min_value=100.0,
+    value=10000.0,
+    step=1000.0
+)
 
 # --------------------------------------------------
 # Parse inputs
@@ -133,11 +138,11 @@ paths = engine.simulate_portfolio_paths(
     horizon_days=horizon_days,
     n_sims=n_sims,
     seed=10,
-    initial_value=100
+    initial_value=initial_value
 )
 
-upper_boundary = 100 * (1 + profit_target)
-lower_boundary = 100 * (1 - loss_limit)
+upper_boundary = initial_value * (1 + profit_target)
+lower_boundary = initial_value * (1 - loss_limit)
 
 boundary_results = engine.boundary_probabilities(
     paths,
@@ -159,7 +164,7 @@ st.subheader("Portfolio Summary")
 
 col1, col2, col3 = st.columns(3)
 
-col1.metric("Portfolio Starting Value", "$100.00")
+col1.metric("Portfolio Starting Value", f"${initial_value:,.2f}")
 col2.metric("Profit Boundary", f"${upper_boundary:.2f}")
 col3.metric("Loss Boundary", f"${lower_boundary:.2f}")
 
