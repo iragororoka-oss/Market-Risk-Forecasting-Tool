@@ -4,3 +4,4 @@ matplotlib
 streamlit
 yfinance
 torch
+pytest
